@@ -1,28 +1,28 @@
-#include <vector> // Підключення додаткового типу даних вектор
+#include <vector>
 
 class File {
 	public:
-		std::string fileName;
-		std::string fileExtension;
-		int fileSize_byte;
+		std::string file_name_;
+		std::string file_extension_;
+		int file_size_by_bytes_;
 
-		File(std::string fileName, std::string fileExtension, int fileSize_byte);
-
+		File(std::string file_name_, std::string file_extension_, int file_size_by_bytes_);
 };
+
 class Folder{
 	public:
-		std::string folderName;
-		std::vector <File*> fileList;
-		std::vector <Folder*> folderList;
+		std::string folder_name_;
+		std::vector <File*> file_list_;
+		std::vector <Folder*> folder_list_;
 
-		Folder(std::string folderName);
+		Folder(std::string folder_name_);
 
-		void addElement(File & file);
-		void addElement(Folder & folder);
+		void AddElement(File& file);
+		void AddElement(Folder& folder);
 
-		void get_fileList(int n);
-		void get_fileTree();
-		int get_maxN_fromTree();
-		void print_longRoude(int maxN, std::string nameFolder);
-		void get_remoteFile();
+		void GetFileList(int tabs);
+		void GetFileTree();
+		int GetMaxTabFromTree();
+		void PrintLongRoudes(int max_tab, std::string folder_name);
+		void GetLongerFileRoude();
 };

@@ -1,89 +1,88 @@
-#include <iostream> 		// Підключення стандартної бібліотеки воду/виводу 
-#include "lab-cpp_5-10_class.h"	// Підключення власної бібліотеки з класами для о'бєктів файлу і тек 
+#include <iostream>
+#include "lab-cpp_5-10_class.h"
 
-// tab функція що виводить у термінал n-у кількість табів без переходу на новий рядочок
-void tab(int n) { for (int i = 0; i < n; i++) std::cout << "\t"; }
+void tab(int tabs) { for (int i = 0; i < tabs; i++) std::cout << "\t"; }
 
-File::File(std::string fileName, std::string fileExtension, int fileSize_byte)
+File::File(std::string file_name_, std::string file_extension_, int file_size_by_bytes_)
 {
-	this->fileName = fileName;
-	this->fileExtension = fileExtension;
-	this->fileSize_byte = fileSize_byte;
+	this->file_name_ = file_name_;
+	this->file_extension_ = file_extension_;
+	this->file_size_by_bytes_ = file_size_by_bytes_;
 }
 
-Folder::Folder(std::string folderName) { this->folderName = folderName; }
+Folder::Folder(std::string folder_name_) { this->folder_name_ = folder_name_; }
 
-void Folder::addElement(File & file) { fileList.push_back(&file); }
+void Folder::AddElement(File& file) { file_list_.push_back(&file); }
 
-void Folder::addElement(Folder & folder) { folderList.push_back(&folder); }
+void Folder::AddElement(Folder& folder) { folder_list_.push_back(&folder); }
 
-void Folder::get_fileList(int n)
+void Folder::GetFileList(int tabs)
 {
-	for (int i = 0; i < fileList.size(); i++)
+	for (int i = 0; i < file_list_.size(); i++)
 	{
-		tab(n + 1);
-		std::cout << fileList[i]->fileName << fileList[i]->fileExtension << std::endl;
+		tab(tabs + 1);
+		std::cout << file_list_[i]->file_name_ << file_list_[i]->file_extension_ << std::endl;
 	}
 }
 
-void Folder::get_fileTree()
+void Folder::GetFileTree()
 {
 	static int tabs = 0;
 	tab(tabs);
-	std::cout << folderName << std::endl;
-	for (int i = 0; i < folderList.size(); i++)
+	std::cout << folder_name_ << std::endl;
+	for (int i = 0; i < folder_list_.size(); i++)
 	{
 		tabs++;
-		folderList[i]->get_fileTree();
+		folder_list_[i]->GetFileTree();
 		tabs--;
 	}
-	get_fileList(tabs);
+	GetFileList(tabs);
 }
 
-int Folder::get_maxN_fromTree()
+int Folder::GetMaxTabFromTree()
 {
-	static int n = 0;
-	static int maxN = 0;
-	for (int i = 0; i < folderList.size(); i++)
+	static int tabs = 0;
+	static int max_tab = 0;
+	for (int i = 0; i < folder_list_.size(); i++)
 	{
-		n++;
-		folderList[i]->get_maxN_fromTree();
-		if (n > maxN) maxN = n;
-		n--;
+		tabs++;
+		folder_list_[i]->GetMaxTabFromTree();
+		if (tabs > max_tab) max_tab = tabs;
+		tabs--;
 	}
-	return maxN;
+	return max_tab;
 }
 
-void Folder::print_longRoude(int maxN, std::string nameFolder)
+void Folder::PrintLongRoudes(int max_tab, std::string folder_name)
 {
-	static int n = 0;
+	static int tabs = 0;
 	static std::vector <Folder*> longRoude;
-	for (int i = 0; i < folderList.size(); i++)
+	for (int i = 0; i < folder_list_.size(); i++)
 	{
-		n++;
-		longRoude.push_back(folderList[i]);
-		folderList[i]->print_longRoude(maxN, nameFolder);
-		if (n == maxN)
+		tabs++;
+		longRoude.push_back(folder_list_[i]);
+		folder_list_[i]->PrintLongRoudes(max_tab, folder_name);
+		if (tabs == max_tab)
 		{
-			for(int k = 0; k < longRoude[longRoude.size() - 1]->fileList.size(); k++)
+			for(int k = 0; k < longRoude[longRoude.size() - 1]->file_list_.size(); k++)
 			{
-				std::cout << nameFolder << "/";
+				std::cout << folder_name << "/";
 				for(int j = 0; j < longRoude.size(); j++)
 				{
-					std::cout << longRoude[j]->folderName << "/";
+					std::cout << longRoude[j]->folder_name_ << "/";
 				}
-				std::cout << longRoude[longRoude.size() - 1]->fileList[k]->fileName 
-					<< longRoude[longRoude.size() - 1]->fileList[k]->fileExtension 
+				std::cout << longRoude[longRoude.size() - 1]->file_list_[k]->file_name_ 
+					<< longRoude[longRoude.size() - 1]->file_list_[k]->file_extension_ 
 					<< std::endl;
 			}
 		}
-		n--;
+		tabs--;
 		longRoude.pop_back();
 	}
 }
 
-void Folder::get_remoteFile()
+void Folder::GetLongerFileRoude()
 {
-	int maxN = get_maxN_fromTree();
-	print_longRoude(maxN, folderName);
+	int max_tab = GetMaxTabFromTree();
+	PrintLongRoudes(max_tab, folder_name_);
 }
